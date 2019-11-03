@@ -1,0 +1,10 @@
+#!/bin/bash
+set -Eexuo pipefail
+
+cd $(dirname $0)/..
+
+auto/build-to-local
+
+docker build -t registry.cowbell.realestate.com.au/property-insights/capture-pd-alerts-to-trello:latest .
+exec docker run \
+  -it registry.cowbell.realestate.com.au/property-insights/capture-pd-alerts-to-trello:latest

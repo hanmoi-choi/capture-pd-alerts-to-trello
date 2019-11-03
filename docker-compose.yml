@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  dev:
+    image: haskell:8.6@sha256:ef523a468575a880630cf7b5487862dd22641991a6615e1272d36309dbeb7f03
+    working_dir: /work
+    command: support/dev/run
+    volumes:
+      - .:/work
+      - stack-global:/root/.stack
+
+  run-with-ecr-image:
+    image: 616491371591.dkr.ecr.ap-southeast-2.amazonaws.com/property-insights/fargate:capture-pd-alerts-to-trello-latest
+    environment:
+      AWS_DEFAULT_REGION: ap-southeast-2
+      TRELLO_API_URL: https://api.trello.com/1/
+      TRELLO_API_KEY:
+      PAGERDUTY_API_URL: https://api.pagerduty.com/
+      CONFIG_FILE_PATH: config/the-castle.yml
+      KMS_ENCRYPTED_TRELLO_API_TOKEN:
+      KMS_ENCRYPTED_PAGERDUTY_API_TOKEN:
+      AWS_ACCESS_KEY_ID:
+      AWS_SESSION_TOKEN:
+      AWS_SECRET:
+      AWS_SECRET_ACCESS_KEY:
+      AWS_ROLE:
+      AWS_ACCOUNT:
+    command: shush exec -- ./capture-pd-alerts-to-trello-exe
+  ci:
+    image: registry.cowbell.realestate.com.au/property-insights/capture-pd-alerts-to-trello-ci-base:4
+    working_dir: /work
+    volumes:
+      - .:/work
+
+volumes:
+  stack-global:
+    external: true

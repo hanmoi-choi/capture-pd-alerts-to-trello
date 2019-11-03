@@ -1,0 +1,7 @@
+resolver: nightly-2019-08-17
+name: custom-snapshot
+packages:
+- git: https://github.com/mpickering/slack-api.git
+  commit: 2535288e36d7120c5ac0ebbd802a458b2636fce1
+- github-0.22
+- binary-instances-1

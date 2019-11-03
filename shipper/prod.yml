@@ -1,0 +1,9 @@
+---
+include:
+- s3://dockage-property-insights-fargate-prod-ap-southeast-2/dockage.yml
+- common.yml
+
+var:
+  subnets:
+    - subnet-cc5be6a8
+    - subnet-e9fb219f

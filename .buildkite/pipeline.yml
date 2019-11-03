@@ -1,0 +1,51 @@
+env:
+  BUILDKITE_TIMESTAMP_LINES: true
+
+steps:
+  - label: ':mag: Run Tests'
+    command: ./auto/test
+    env:
+      SERVICE: ci
+    agents:
+      queue: cpdev:build
+
+  - wait
+
+  - label: ':building_construction: Build Artifact'
+    command: ./auto/build-to-local
+    env:
+      SERVICE: ci
+    agents:
+      queue: rea-artifacts:build
+    plugins:
+      artifacts#v1.2.0:
+        upload: dist/capture-pd-alerts-to-trello-exe
+
+  - wait
+
+  - label: ':docker: :ecr: Release Image To ECR'
+    branches: master
+    command: ./auto/release
+    agents:
+      queue: rea-artifacts:build
+    plugins:
+      artifacts#v1.2.0:
+        download: dist/capture-pd-alerts-to-trello-exe
+        upload: artifacts/docker-image.txt
+      ssh://git@git.realestate.com.au/cowbell/ensure-ecr-buildkite-plugin#v1.0.0:
+        namespace: property-insights
+        repository: capture-pd-alerts-to-trello
+        regions: ap-southeast-2
+  - wait
+
+  - label: 'Deploy to Eventus Dev'
+    branches: master
+    agents:
+      queue: 'eventus-dev:deploy'
+    command: auto/deploy-dev
+
+  # - name: ":airplane: :amazon-ecs: dev deploy ECS task definitions"
+  #   command: "auto/deploy-ecs-task-definitions-dev"
+  #   branches: "master"
+  #   agents:
+  #     queue: "eventus-dev:deploy"

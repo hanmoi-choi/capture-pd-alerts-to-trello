@@ -1,0 +1,4 @@
+#!/bin/bash
+set -Eexuo pipefail
+
+buildkite-agent pipeline upload < "$(dirname $0)/pipeline.yml"

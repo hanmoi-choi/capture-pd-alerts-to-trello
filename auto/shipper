@@ -1,0 +1,10 @@
+#!/bin/bash
+set -Eexuo pipefail
+
+cd $(dirname $0)/..
+
+SHIPPER_IMAGE=639347700193.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/rea/shipper:2.0.5
+
+exec docker run --rm -v $PWD:/cwd:ro \
+  -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SECURITY_TOKEN \
+  $SHIPPER_IMAGE "$@"

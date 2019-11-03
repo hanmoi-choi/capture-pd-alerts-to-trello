@@ -1,0 +1,20 @@
+#!/bin/bash -eu
+
+cd $(dirname $0)/..
+
+source auto/config.sh
+
+echo "+++ Deploying using ${CURRENT_ECR_DOCKER_TAG}"
+
+ENV=$1
+ENV_SHIPPER_CONFIG="shipper/${ENV}.yml"
+
+if [ ! -f "${ENV_SHIPPER_CONFIG}" ]; then
+  echo "File not found: ${ENV_SHIPPER_CONFIG}"
+  echo "Expecting [dev|prod]. Invalid params: ${ENV}"
+  exit 1
+fi
+
+./auto/shipper deploy \
+  --config ${ENV_SHIPPER_CONFIG} \
+  --override var.image=${CURRENT_ECR_DOCKER_TAG}

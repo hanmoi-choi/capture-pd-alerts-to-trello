@@ -1,0 +1,53 @@
+---
+var:
+  app_name: capture-pd-alerts-to-trello
+  contact: Slack ds-pi-support
+  costcode: 451
+  lob: technology
+  tribe: data
+  rea_system_id: capture-pd-alerts-to-trello
+
+target: ecs
+name: "<(var.app_name)>"
+
+scheduled_task:
+  recurrence: cron(*/30 * ? * MON-FRI *)
+  timeout: 120
+
+aws:
+  vpc: "<(var.dockage.vpc_id)>"
+  ecs:
+    cluster: "<(var.dockage.cluster_name)>"
+  networking:
+    subnets: "<(var.subnets)>"
+  tags:
+    customized_tag: "<(var.app_name)>"
+  iam:
+    role:
+      policy_statements:
+        cloudwatch_metric_access:
+          action: "cloudwatch:PutMetricData"
+          effect: "Allow"
+          resource: "*"
+
+containers:
+  app:
+    image: "<(var.image)>"
+    environment:
+      RUNNING_SECONDS: 30
+      AWS_DEFAULT_REGION: ap-southeast-2
+      TRELLO_API_URL: https://api.trello.com/1/
+      TRELLO_API_KEY:
+      PAGERDUTY_API_URL: https://api.pagerduty.com/
+      CONFIG_FILE_PATH: config/the-castle.yml
+      KMS_ENCRYPTED_TRELLO_API_TOKEN:
+      KMS_ENCRYPTED_PAGERDUTY_API_TOKEN:
+    memory: 512
+    cpu: 1024
+    labels:
+      contact: "<(var.contact)>"
+      name: "<(var.app_name)>"
+
+logging:
+  splunk:
+    index: property-insights

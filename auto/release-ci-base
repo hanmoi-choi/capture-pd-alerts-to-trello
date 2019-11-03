@@ -1,0 +1,23 @@
+#!/bin/bash
+set -Eexuo pipefail
+
+cd $(dirname $0)/..
+
+VERSION=4
+
+REPOSITORY=registry.cowbell.realestate.com.au/property-insights/capture-pd-alerts-to-trello-ci-base
+IMAGE=$REPOSITORY:$VERSION
+
+echo building $IMAGE
+docker build -t $IMAGE -f support/ci-base/Dockerfile .
+
+# export $(rea-as saml arn:aws:iam::616491371591:role/Eventus-Dev-NormalUser)
+
+# rea-slip-docker-login
+
+# this container can be run with docker run -t $IMAGE
+docker tag $IMAGE $REPOSITORY:latest
+echo pushing $IMAGE to registry
+docker push $IMAGE
+echo pushing $REPOSITORY:latest to registry
+docker push $REPOSITORY:latest

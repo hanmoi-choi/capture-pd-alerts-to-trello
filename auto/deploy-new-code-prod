@@ -1,0 +1,21 @@
+#!/bin/bash
+set -Eexuo pipefail
+
+# deploy your local version of the code to prod
+
+# requires https://git.realestate.com.au/cowbell/rea-as + https://git.realestate.com.au/cowbell/rea-slip-utils
+# you probably want to export REA_LDAP_USER=<my.user> in your .bash_profile
+
+export AWS_DEFAULT_REGION=ap-southeast-2
+
+export $(rea-as saml arn:aws:iam::822908674847:role/cpdev-Developer)
+
+auto/build-to-local
+
+export BUILDKITE_BUILD_NUMBER=$(date +"%Y-%m-%d_%H-%M-%S")
+
+rea-slip-docker-login
+
+auto/release
+
+auto/deploy-to-prod

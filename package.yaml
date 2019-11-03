@@ -1,0 +1,114 @@
+name:                capture-pd-alerts-to-trello
+version:             0.1.0
+github:              "https://git.realestate.com.au/property-insights/capture-pd-alerts-to-trello"
+license:             ""
+author:              "Daniel Choi"
+maintainer:          "daniel.choi@rea-group.com"
+copyright:           ""
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://git.realestate.com.au/property-insights/capture-pd-alerts-to-trello>
+
+ghc-options:
+  # Recommended settings for polysemy
+  - -O2
+  - -flate-specialise
+  - -fspecialise-aggressively
+  - -fplugin=Polysemy.Plugin
+  # Useful warnings
+  - -Wall
+  - -Wcompat
+  - -Wredundant-constraints
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+
+default-extensions:
+  # Recommended extensions for polysemy
+  - DataKinds
+  - FlexibleContexts
+  - GADTs
+  - LambdaCase
+  - PolyKinds
+  - RankNTypes
+  - ScopedTypeVariables
+  - TypeApplications
+  - TypeOperators
+  - TypeFamilies
+  - TemplateHaskell
+
+  # Deriving extensions
+  - GeneralizedNewtypeDeriving
+  - DeriveGeneric
+
+  # Misc extensions
+  - OverloadedStrings
+
+dependencies:
+  - base >= 4.7 && < 5
+  - aeson >=0.6 && <1.4
+  - bytestring >=0.9 && <0.11
+  - text >=0.11 && <2.0
+  - template-haskell
+  - monad-control >=0.3 && <1.1
+  - yaml
+  - http-types
+  - uri-encode
+  - http-client-tls >=0.3 && <0.4
+  - http-client
+  - http-conduit >=2.3 && <2.4
+  - directory >=1.1 && <1.4
+  - data-default
+  - aeson
+  - conduit >=1.0 && <2.0
+  - conduit-extra
+  - hspec
+  # - monad-logger >=0.3 && <0.4
+  - file-embed
+  - safe
+  - unordered-containers
+  - containers
+  - vector
+  - case-insensitive
+  - raw-strings-qq
+  - lens
+  - mtl
+  - transformers
+    # Polysemy
+  - polysemy >= 1.0.0.0 && < 1.1
+  - polysemy-plugin >= 0.2.2.0 && < 0.3
+  - polysemy-zoo >= 0.5.0.1 && < 0.6
+
+
+library:
+  source-dirs: src
+
+executables:
+  capture-pd-alerts-to-trello-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - capture-pd-alerts-to-trello
+
+tests:
+  capture-pd-alerts-to-trello-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - capture-pd-alerts-to-trello

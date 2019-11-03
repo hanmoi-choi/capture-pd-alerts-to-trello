@@ -1,0 +1,13 @@
+---
+include:
+- s3://dockage-property-insights-fargate-dev-ap-southeast-2/dockage.yml
+- common.yml
+
+var:
+  subnets:
+    - subnet-8ffda3f9
+    - subnet-6fe8c30b
+
+aws:
+  kms:
+    key:

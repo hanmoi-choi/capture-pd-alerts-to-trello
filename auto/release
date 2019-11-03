@@ -1,0 +1,25 @@
+#!/bin/bash
+set -Eexuo pipefail
+
+cd $(dirname $0)/..
+
+
+REPOSITORY=639347700193.dkr.ecr.ap-southeast-2.amazonaws.com/property-insights/capture-pd-alerts-to-trello
+SEMVER=$(<SEMVER)
+VERSION=$SEMVER.${BUILDKITE_BUILD_NUMBER:-dev}
+TAG=$REPOSITORY:${VERSION}
+
+mkdir -p artifacts
+echo $IMAGE > artifacts/docker-image.txt
+
+echo building $IMAGE
+docker build -t $IMAGE -f support/prod/Dockerfile .
+
+# $(aws ecr get-login --no-include-email --registry-ids 616491371591)
+
+# this container can be run with docker run -t $IMAGE
+docker tag $IMAGE $REPOSITORY:latest
+echo pushing $IMAGE to registry
+docker push $IMAGE
+echo pushing $REPOSITORY:latest to registry
+docker push $REPOSITORY:latest

@@ -1,0 +1,22 @@
+trello:
+  # Board name where Card
+  board-name: The Castle
+
+  # List where cards are created
+  column-for-triage: Triage
+
+  # Trello API does not publish users' email address so manual mapping
+  # between okta email and trello id is required
+  members:
+    -
+    -
+
+  # labels to be set
+  labels-for-new-card:
+    - unplanned
+    - Custodianship
+
+pagerduty:
+  # Team(Schedule) name to monitor
+  team-name: Group Technology - DS - Property Insights
+  schedule-name: Group Technology - DS - Property Insights - Business Hours
